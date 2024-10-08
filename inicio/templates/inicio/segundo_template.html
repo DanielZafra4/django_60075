@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+{% extends "inicio\index.html" %}
+{% load static %}
+{% block title_head %}
+SegundoTemplate
+{% endblock title_head %}
+
+{% block h1_header %}
+Segundo Template
+{% endblock h1_header %}
+
+{% block main %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,6 +36,8 @@
         {%endif%}
         {%endfor%}
     </ul>
-        
+    <img src="assets/img/01.jpg" alt="">
 </body>
 </html>
+{% endblock main %}
+
