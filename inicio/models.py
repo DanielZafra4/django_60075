@@ -8,4 +8,4 @@ class Auto(models.Model):
     anio =  models.IntegerField()
     
     def __str__(self):
-        return f'{self.id} {self.marca} {self.modelo}'
+        return f'{self.id} {self.modelo} {self.anio}'
