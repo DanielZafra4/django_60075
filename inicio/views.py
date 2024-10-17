@@ -3,7 +3,8 @@ from django.template import Template, Context, loader
 from datetime import datetime
 from django.shortcuts import render, redirect
 from inicio.models import Auto
-from inicio.forms import CrearAutoFormulario, BuscarAutoFormulario
+from inicio.forms import CrearAutoFormulario, BuscarAutoFormulario, EditarAutoFormulario
+from django.contrib.auth.decorators import login_required
 
 def mi_vista(request):
     return HttpResponse("Hola soy la vista")
@@ -90,3 +91,35 @@ def crear_auto(request):
             return redirect("inicio:buscar_auto")
     
     return render(request, 'inicio/crear_auto.html', {'form': formulario})
+
+
+def ver_auto(request, id):
+    auto = Auto.objects.get(id=id)
+    return render(request, 'inicio/ver_auto.html', {'auto': auto})
+
+
+@login_required
+def eliminar_auto(request, id):
+    auto = Auto.objects.get(id=id)
+    auto.delete()
+    return redirect('inicio:buscar_auto')
+
+@login_required
+def editar_auto(request, id):
+    auto = Auto.objects.get(id=id)
+    
+    formulario = EditarAutoFormulario(initial={'modelo': auto.modelo, 'marca': auto.marca, 'anio':auto.anio})
+    
+    if request.method == "POST":
+        formulario = EditarAutoFormulario(request.POST)
+        if formulario.is_valid():
+            auto.modelo = formulario.cleaned_data.get('modelo')
+            auto.marca = formulario.cleaned_data.get('marca')
+            auto.anio = formulario.cleaned_data.get('anio')
+            
+            auto.save() 
+             
+            return redirect('inicio:buscar_auto')
+    return render(request, 'inicio/editar_auto.html', {'auto': auto,'form': formulario})
+            
+    
